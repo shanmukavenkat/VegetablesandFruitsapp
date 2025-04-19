@@ -1,0 +1,3 @@
+-- AlterTable
+ALTER TABLE "Order" ALTER COLUMN "buyerName" SET DATA TYPE TEXT,
+ALTER COLUMN "buyerContact" SET DATA TYPE TEXT;

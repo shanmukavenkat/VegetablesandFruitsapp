@@ -1,0 +1,47 @@
+generator client {
+  provider        = "prisma-client-js"
+  previewFeatures = ["driverAdapters"]
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+//DATABASE_URL="postgresql://work_owner:npg_DXO95fPKtChk@ep-icy-snowflake-a1vns3rc-pooler.ap-southeast-1.aws.neon.tech/work?sslmode=require"
+model Expense {
+  id        String   @id @default(uuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  title     String   @db.VarChar(255)
+  amount    Int
+}
+
+model Product {
+  id    String  @id @default(uuid())
+  name  String  @db.VarChar(255)
+  price Float
+  category String  @db.VarChar(100)
+}
+
+model Order {
+  id              String   @id @default(uuid())
+  buyerName       String
+  buyerContact    String
+  deliveryAddress String
+  items           Json
+  status          String   @default("pending")
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+  OrderItem OrderItem[] @relation("OrderToItems")
+}
+
+model OrderItem {
+  id        String   @id @default(cuid())
+  productId String
+  name      String
+  quantity  Int
+  price     Float
+  order     Order    @relation("OrderToItems", fields: [orderId], references: [id])
+  orderId   String
+}
